@@ -43,7 +43,7 @@
           (tset $ :last-screen nil))
         (and fade-out-anim last-screen)
         ;; Transition by sliding left
-        (last-screen:draw (fade-out-anim:currentValue) 0)
+        (last-screen:drawIgnoringOffset (fade-out-anim:currentValue) 0)
         )
     )
 

@@ -1,4 +1,4 @@
-(import-macros {: pd/import : defns : inspect} :source.lib.macros)
+(import-macros {: pd/import : defns : inspect : clamp} :source.lib.macros)
 (import-macros {: deflevel} :source.lib.ldtk.macros)
 
 (deflevel :Level_0
@@ -18,28 +18,44 @@
           entities (?. loaded :entity-layers 1)
           bg (gfx.sprite.new)
           ]
+      (tset $ :width loaded.w)
+      (tset $ :height loaded.h)
       (each [_ {: id : x : y : fields} (ipairs entities.entities)]
         (case id
-          :Player_start (-> (player-ent.new! x y) (: :add))
+          :Player_start
+          (let [player (player-ent.new! x y)] (player:add) (tset $ :player player))
           :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
           ))
       (bg:setTilemap layer.tilemap)
       (bg:setCenter 0 0)
       (bg:moveTo 0 0)
       (bg:setZIndex -100)
-      (tset $ :layer layer)
       ;; (player:add)
       (bg:add)
       ;; (printTable (ldtk.load-level {:level 0}))
       )
     )
 
-  (fn exit! [$])
+  (fn exit! [$]
+    (tset $ :player nil)
+    (gfx.setDrawOffset 0 0)
+    )
 
-  (fn tick! [$]
-    (gfx.sprite.performOnAllSprites (fn react-each [ent]
-                                      (if (?. ent :react!) (ent:react!)))))
+  (fn tick! [$scene]
+    (gfx.sprite.performOnAllSprites
+     (fn react-each [ent]
+       (if (?. ent :react!) (ent:react! $scene))))
+
+    (if $scene.player
+        (let [player-x $scene.player.x
+              player-y $scene.player.y
+              center-x (clamp 0 (- player-x 200) (- $scene.width 400))
+              center-y (clamp 0 (- player-y 120) (- $scene.height 240))
+              ]
+          (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))))
+    )
   (fn draw! [$]
+    
     ;; ($.layer.tilemap:draw 0 0)
     )
   )

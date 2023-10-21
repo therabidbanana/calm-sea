@@ -24,6 +24,9 @@
        ,forms
        ,map)))
 
+(fn clamp [min x max]
+  `(math.max (math.min ,x ,max) ,min))
 
-{: inspect : pd/import : defns }
+
+{: inspect : pd/import : defns : clamp }
 
