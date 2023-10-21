@@ -27,9 +27,9 @@
     self)
 
   (fn update [{:state {: animation : dx : dy : walking?} &as self}]
-    (if walking?
-        (animation:transition! :walking)
-        (animation:transition! :standing {:if :walking}))
+    ;; (if walking?
+    ;;     (animation:transition! :walking)
+    ;;     (animation:transition! :standing {:if :walking}))
     (self:markDirty)
     (self:moveBy dx dy))
 
@@ -37,11 +37,8 @@
     (animation:draw x y))
 
   (fn new! [x y]
-    (let [image (gfx.imagetable.new :assets/images/pineapple-walk)
-          animation (anim.new {: image :states [{:state :standing :start 1 :end 1 :delay 2300 :transition-to :blinking}
-                                                {:state :blinking :start 2 :end 3 :delay 300 :transition-to :pace}
-                                                {:state :pace :start 4 :end 5 :delay 500 :transition-to :standing}
-                                                {:state :walking :start 4 :end 5}]})
+    (let [image (gfx.imagetable.new :assets/images/mermaid)
+          animation (anim.new {: image :states [{:state :standing :start 1 :end 1 :delay 2300}]})
           player (gfx.sprite.new)]
       (player:setBounds x y 32 32)
       (player:setCenter 0 0)

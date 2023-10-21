@@ -6,6 +6,7 @@
       timer playdate.timer
       animation  gfx.animation
       sprite gfx.sprite]
+
   (fn add-scene! [$ name scene]
     (doto $ (tset :scenes name scene)))
 
@@ -34,7 +35,7 @@
 
   (fn draw! [{: active : fade-out-anim : last-screen &as $}]
     (sprite.update)
-    (if $config.debug (playdate.drawFPS 380 200))
+    (if $config.debug (playdate.drawFPS 380 20))
     (if (and active (?. active :draw!)) (active:draw!))
     (if (and fade-out-anim (fade-out-anim:ended))
         (do

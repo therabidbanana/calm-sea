@@ -1,3 +1,7 @@
+# Calm Sea
+
+A game about mermaids swimming around
+
 # Playdate Fennel Starter
 
 This starter set is intended to allow use of the Fennel language on Playdate,

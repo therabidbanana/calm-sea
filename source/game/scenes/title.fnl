@@ -2,15 +2,15 @@
 (import-macros {: deflevel} :source.lib.ldtk.macros)
 
 (deflevel :Level_0
-  [{:player player-ent} (require :source.game.entities.core)
+  [{:player player-ent
+    :school school-ent} (require :source.game.entities.core)
    ldtk (require :source.lib.ldtk.loader)
    {: prepare-level} (require :source.lib.level)
    pd playdate
    gfx pd.graphics]
 
   (fn enter! [$]
-    (let [player (player-ent.new! 20 20)
-          ;; Option 1 - Loads at runtime
+    (let [;; Option 1 - Loads at runtime
           ;; loaded (prepare-level (ldtk.load-level {:level 0}))
           ;; Option 2 - relies on deflevel compiling
           loaded (prepare-level Level_0)
@@ -18,9 +18,11 @@
           entities (?. loaded :entity-layers 1)
           bg (gfx.sprite.new)
           ]
-      (each [_ {: id : x : y} (ipairs entities.entities)]
+      (each [_ {: id : x : y : fields} (ipairs entities.entities)]
         (case id
-          :Player_start (-> (player-ent.new! x y) (: :add))))
+          :Player_start (-> (player-ent.new! x y) (: :add))
+          :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
+          ))
       (bg:setTilemap layer.tilemap)
       (bg:setCenter 0 0)
       (bg:moveTo 0 0)

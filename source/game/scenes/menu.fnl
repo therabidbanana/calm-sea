@@ -7,29 +7,28 @@
       pd playdate
       gfx pd.graphics]
 
-  (local state {})
   (fn enter! [$]
-    ($ui:open-menu! {:options [{:text "Foo" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2") :nametag "Picarding"})}
-                               {:text "Bar [!]" :action #(scene-manager:select! :title)}
-                               {:text "Quux" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")})}
-                               {:text "Qux" :keep-open? true}
-                               {:text "Corge"}
-                               {:text "Grault"}
-                               {:text "Garply"}
-                               ]})
-    ;; (tset $ :state :listview (testScroll pd gfx))
-    )
+    ($ui:open-menu!
+     {:options [{:text "Foo" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2") :nametag "Picarding"})}
+                {:text "Bar [!]" :action #(scene-manager:select! :title)}
+                {:text "Quux" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")})}
+                {:text "Qux" :keep-open? true}
+                {:text "Corge"}
+                {:text "Grault"}
+                {:text "Garply"}
+                ]}))
+
   (fn exit! [$]
     (tset $ :state {}))
-  (fn tick! [{:state {: listview} &as $}]
-    ;; (listview:drawInRect 180 20 200 200)
+
+  (fn tick! [$scene]
     (if ($ui:active?) ($ui:tick!)
-        (let [pressed? playdate.buttonJustPressed]
-          (if (pressed? playdate.kButtonA) (scene-manager:select! :title)))
-        ))
-  (fn draw! [{:state {: listview} &as $}]
+
+     (playdate.buttonJustPressed playdate.kButtonA)
+     (scene-manager:select! :title)))
+
+  (fn draw! [$scene]
     ($ui:render!)
-    ;; (listview:drawInRect 180 20 200 200)
     )
   )
 
