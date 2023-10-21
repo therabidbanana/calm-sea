@@ -43,11 +43,11 @@
     (let [pressed? playdate.buttonJustPressed
           selected (?. view.options (view:getSelectedRow))]
       (if anim-h
-          (set comp.rect.height (anim-h:currentValue)))
+          (tset comp.rect :height (anim-h:currentValue)))
       (if anim-w
-          (set comp.rect.width (anim-w:currentValue)))
-      ;; (if (and anim-h (anim-h:ended)) (set comp :anim-h nil))
-      ;; (if (and anim-w (anim-w:ended)) (set comp :anim-w nil))
+          (tset comp.rect :width (anim-w:currentValue)))
+      (if (and anim-h (anim-h:ended)) (tset comp :anim-h nil))
+      (if (and anim-w (anim-w:ended)) (tset comp :anim-w nil))
       (if (pressed? playdate.kButtonDown) (view:selectNextRow)
           (pressed? playdate.kButtonUp) (view:selectPreviousRow)
           (pressed? playdate.kButtonA) (-handle-click selected $ui))))

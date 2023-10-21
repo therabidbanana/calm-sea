@@ -1,44 +1,23 @@
 (import-macros {: pd/import : defns : inspect} :source.lib.macros)
-(import-macros {: deflevel} :source.lib.ldtk.macros)
 
-(deflevel :Level_0
-  [{:player player-ent
-    :school school-ent} (require :source.game.entities.core)
-   ldtk (require :source.lib.ldtk.loader)
-   {: prepare-level} (require :source.lib.level)
+(defns :TitleScreen
+  [$ui (require :source.lib.ui)
+   scene-manager (require :source.lib.scene-manager)
    pd playdate
    gfx pd.graphics]
 
   (fn enter! [$]
-    (let [;; Option 1 - Loads at runtime
-          ;; loaded (prepare-level (ldtk.load-level {:level 0}))
-          ;; Option 2 - relies on deflevel compiling
-          loaded (prepare-level Level_0)
-          layer (?. loaded :tile-layers 1)
-          entities (?. loaded :entity-layers 1)
-          bg (gfx.sprite.new)
-          ]
-      (each [_ {: id : x : y : fields} (ipairs entities.entities)]
-        (case id
-          :Player_start (-> (player-ent.new! x y) (: :add))
-          :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
-          ))
-      (bg:setTilemap layer.tilemap)
-      (bg:setCenter 0 0)
-      (bg:moveTo 0 0)
-      (bg:setZIndex -100)
-      (tset $ :layer layer)
-      ;; (player:add)
-      (bg:add)
-      ;; (printTable (ldtk.load-level {:level 0}))
-      )
     )
 
-  (fn exit! [$])
+  (fn exit! [$]
+    )
 
   (fn tick! [$]
-    (gfx.sprite.performOnAllSprites (fn react-each [ent]
-                                      (if (?. ent :react!) (ent:react!)))))
+    (if ($ui:active?) ($ui:tick!)
+
+        (playdate.buttonJustPressed playdate.kButtonA)
+        (scene-manager:select! :level0))
+    )
   (fn draw! [$]
     ;; ($.layer.tilemap:draw 0 0)
     )

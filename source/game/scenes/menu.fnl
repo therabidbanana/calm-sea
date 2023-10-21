@@ -1,6 +1,6 @@
 (import-macros {: inspect : defns} :source.lib.macros)
 
-(defns scene
+(defns :Menu
   [{:player player-ent} (require :source.game.entities.core)
       scene-manager (require :source.lib.scene-manager)
       $ui (require :source.lib.ui)
@@ -10,7 +10,7 @@
   (fn enter! [$]
     ($ui:open-menu!
      {:options [{:text "Foo" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2") :nametag "Picarding"})}
-                {:text "Bar [!]" :action #(scene-manager:select! :title)}
+                {:text "Bar [!]" :action #(scene-manager:select! :level0)}
                 {:text "Quux" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")})}
                 {:text "Qux" :keep-open? true}
                 {:text "Corge"}
@@ -25,7 +25,7 @@
     (if ($ui:active?) ($ui:tick!)
 
      (playdate.buttonJustPressed playdate.kButtonA)
-     (scene-manager:select! :title)))
+     (scene-manager:select! :level0)))
 
   (fn draw! [$scene]
     ($ui:render!)

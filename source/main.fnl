@@ -17,7 +17,7 @@
 
 (let [{: scene-manager} (require :source.lib.core)]
   (scene-manager:load-scenes! (require :source.game.scenes))
-  (scene-manager:select! :menu)
+  (scene-manager:select! :title)
 
   (fn playdate.update []
     (scene-manager:tick!)
