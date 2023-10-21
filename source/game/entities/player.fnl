@@ -1,4 +1,4 @@
-(import-macros {: inspect : defns} :source.lib.macros)
+(import-macros {: inspect : defns : clamp} :source.lib.macros)
 
 (defns :player
   [pressed? playdate.buttonIsPressed
@@ -7,12 +7,15 @@
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
-    (let [dy (if (pressed? playdate.kButtonUp) (* -1 state.speed)
-                 (pressed? playdate.kButtonDown) (* 1 state.speed)
-                 0)
-          dx (if (pressed? playdate.kButtonLeft) (* -1 state.speed)
-                 (pressed? playdate.kButtonRight) (* 1 state.speed)
-                 0)
+    (let [accel (if (or (pressed? playdate.kButtonDown) (pressed? playdate.kButtonA))
+                    0.3
+                    -0.1)
+          speed (clamp 0 (+ state.speed accel) 3)
+          
+          (dx dy) (-> speed
+                      (playdate.geometry.vector2D.newPolar (playdate.getCrankPosition))
+                      (: :unpack))
+
           dx (if (and (>= (+ x width) $scene.width) (> dx 0)) 0
                  (and (<= x 0) (< dx 0)) 0
                  dx)
@@ -21,6 +24,7 @@
                  dy)]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
+      (tset self :state :speed speed)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
       (if (playdate.buttonJustPressed playdate.kButtonB)
           (scene-manager:select! :menu))
