@@ -30,4 +30,5 @@
       (tset school :update update)
       (tset school :react! react!)
       (tset school :state {: animation :speed (or speed 2) :dx 0 :dy 0 :visible true})
+      (school:setCollideRect 4 4 28 28)
       school)))

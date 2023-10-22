@@ -3,12 +3,13 @@
 (defns :player
   [pressed? playdate.buttonIsPressed
    gfx playdate.graphics
-   scene-manager (require :source.lib.scene-manager)
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
     (let [accel (if (or (pressed? playdate.kButtonDown) (pressed? playdate.kButtonA))
                     0.3
+                    (pressed? playdate.kButtonUp)
+                    (- 0.1 state.speed)
                     -0.1)
           speed (clamp 0 (+ state.speed accel) 3)
           
@@ -24,10 +25,9 @@
                  dy)]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
+      (tset self :state :invuln-ticks (math.max 0 (- (or state.invuln-ticks 0) 1)))
       (tset self :state :speed speed)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
-      (if (playdate.buttonJustPressed playdate.kButtonB)
-          (scene-manager:select! :menu))
       )
     self)
 
@@ -36,8 +36,18 @@
     ;;     (animation:transition! :walking)
     ;;     (animation:transition! :standing {:if :walking}))
     (self:setImage (animation:getImage))
-    (self:moveBy dx dy)
+    (self:moveBy (math.floor dx) (math.floor dy))
     )
+
+  (fn take-damage [{:state {: health : invuln-ticks &as state}}]
+    (if (<= (or invuln-ticks 0) 0)
+        (doto state
+          (tset :invuln-ticks 30)
+          (tset :health (- health 1)))
+        ))
+
+  (fn dead? [{:state {: health}}]
+    (<= health 0))
 
   (fn new! [x y]
     (let [image (gfx.imagetable.new :assets/images/mermaid)
@@ -47,6 +57,9 @@
       (player:setCenter 0 0)
       (tset player :update update)
       (tset player :react! react!)
-      (tset player :state {: animation :speed 2 :dx 0 :dy 0 :visible true})
+      (tset player :take-damage take-damage)
+      (tset player :dead? dead?)
+      (tset player :state {: animation :health 3 :speed 2 :dx 0 :dy 0 :visible true})
+      (player:setCollideRect 6 1 24 30)
       player)))
 

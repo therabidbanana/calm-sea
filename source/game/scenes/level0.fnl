@@ -3,8 +3,10 @@
 
 (deflevel :Level_0
   [{:player player-ent
+    : player-hud
     :school school-ent} (require :source.game.entities.core)
    ldtk (require :source.lib.ldtk.loader)
+   scene-manager (require :source.lib.scene-manager)
    {: prepare-level} (require :source.lib.level)
    pd playdate
    gfx pd.graphics]
@@ -32,6 +34,7 @@
       (bg:setZIndex -100)
       ;; (player:add)
       (bg:add)
+      (: (player-hud.new! $.player) :add)
       ;; (printTable (ldtk.load-level {:level 0}))
       )
     )
@@ -49,11 +52,18 @@
     (if $scene.player
         (let [player-x $scene.player.x
               player-y $scene.player.y
+              player-health $scene.player.state.health
+              player-invuln (or $scene.player.state.invuln-ticks 0)
               center-x (clamp 0 (- player-x 200) (- $scene.width 400))
-              center-y (clamp 0 (- player-y 120) (- $scene.height 240))
-              ]
-          (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))))
+              center-y (clamp 0 (- player-y 120) (- $scene.height 240))]
+          (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
+          (if (and (> (length ($scene.player:overlappingSprites)) 0)
+                   (<= player-invuln 0))
+              ($scene.player:take-damage))
+          (if ($scene.player:dead?)
+              (scene-manager:select! :menu))))
     )
+
   (fn draw! [$]
     
     ;; ($.layer.tilemap:draw 0 0)
