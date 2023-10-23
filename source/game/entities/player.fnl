@@ -7,11 +7,11 @@
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
     (let [accel (if (or (pressed? playdate.kButtonDown) (pressed? playdate.kButtonA))
-                    0.3
+                    0.15
                     (pressed? playdate.kButtonUp)
-                    (- 0.1 state.speed)
-                    -0.1)
-          speed (clamp 0 (+ state.speed accel) 3)
+                    (math.min (- 0 (* 0.2 state.speed)) -0.05)
+                    -0.05)
+          speed (clamp 0 (+ state.speed accel) 4)
           
           angle   (playdate.getCrankPosition)
           (dx dy) (-> speed
@@ -33,10 +33,11 @@
       )
     self)
 
-  (fn update [{:state {: animation : dx : dy : angle : swimming?} &as self}]
+  (fn update [{:state {: animation : invuln-ticks : dx : dy : angle : swimming?} &as self}]
     (if swimming?
-        (animation:transition! (.. :swim- (math.floor (// (or angle 0) 45))))
+        (animation:transition! (.. :swim- (math.floor (+ 0.5 (/ (or angle 0) 45)))))
         (animation:transition! :standing))
+    (self:setVisible (= (% (// (or invuln-ticks 0) 5) 2) 0))
     (self:setImage (animation:getImage))
     (self:moveBy (math.floor dx) (math.floor dy))
     )
@@ -44,7 +45,7 @@
   (fn take-damage [{:state {: health : invuln-ticks &as state}}]
     (if (<= (or invuln-ticks 0) 0)
         (doto state
-          (tset :invuln-ticks 30)
+          (tset :invuln-ticks 80)
           (tset :health (- health 1)))
         ))
 
