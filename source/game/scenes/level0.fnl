@@ -19,9 +19,16 @@
           layer (?. loaded :tile-layers 1)
           entities (?. loaded :entity-layers 1)
           bg (gfx.sprite.new)
+          alt-tiles (gfx.imagetable.new :assets/images/tiles1)
+          main-tiles (gfx.imagetable.new :assets/images/tiles)
           ]
       (tset $ :width loaded.w)
       (tset $ :height loaded.h)
+      (tset $ :ticks 0)
+      (tset $ :bg bg)
+      (tset $ :tilemap layer.tilemap)
+      (tset $ :alt-tiles alt-tiles)
+      (tset $ :main-tiles main-tiles)
       (each [_ {: id : x : y : fields} (ipairs entities.entities)]
         (case id
           :Player_start
@@ -29,6 +36,8 @@
           :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
           ))
       (bg:setTilemap layer.tilemap)
+      (layer.tilemap:setImageTable $.main-tiles)
+      (tset $ :curr-tiles $.main-tiles)
       (bg:setCenter 0 0)
       (bg:moveTo 0 0)
       (bg:setZIndex -100)
@@ -48,6 +57,13 @@
     (gfx.sprite.performOnAllSprites
      (fn react-each [ent]
        (if (?. ent :react!) (ent:react! $scene))))
+
+    ;; Handle animated BG via image table swaps
+    (tset $scene :ticks (+ $scene.ticks 1))
+    (if (and (= (% (// $scene.ticks 12) 2) 0) (= $scene.curr-tiles $scene.alt-tiles))
+        (do ($scene.tilemap:setImageTable $scene.main-tiles) (tset $scene :curr-tiles $scene.main-tiles) ($scene.bg:markDirty))
+        (and (not= (% (// $scene.ticks 12) 2) 0) (= $scene.curr-tiles $scene.main-tiles))
+        (do ($scene.tilemap:setImageTable $scene.alt-tiles) (tset $scene :curr-tiles $scene.alt-tiles) ($scene.bg:markDirty)))
 
     (if $scene.player
         (let [player-x $scene.player.x
