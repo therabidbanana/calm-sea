@@ -15,11 +15,17 @@
 
 (global $config {:debug true})
 
-(let [{: scene-manager} (require :source.lib.core)]
+(let [{: scene-manager} (require :source.lib.core)
+      $ui (require :source.lib.ui)
+      ]
   (scene-manager:load-scenes! (require :source.game.scenes))
   (scene-manager:select! :title)
 
   (fn playdate.update []
-    (scene-manager:tick!)
-    (scene-manager:draw!)))
+    (if ($ui:active?)
+        (do
+          ($ui:tick!) ($ui:render!))
+        (do
+          (scene-manager:tick!)
+          (scene-manager:draw!)))))
 
