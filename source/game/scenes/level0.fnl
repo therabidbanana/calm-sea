@@ -4,10 +4,12 @@
 (deflevel :Level_0
   [{:player player-ent
     : player-hud
+    : treasure
     :school school-ent} (require :source.game.entities.core)
    ldtk (require :source.lib.ldtk.loader)
    scene-manager (require :source.lib.scene-manager)
    {: prepare-level} (require :source.lib.level)
+   $ui (require :source.lib.ui)
    pd playdate
    gfx pd.graphics]
 
@@ -21,6 +23,7 @@
           bg (gfx.sprite.new)
           alt-tiles (gfx.imagetable.new :assets/images/tiles1)
           main-tiles (gfx.imagetable.new :assets/images/tiles)
+          on-treasure (fn [_type] (scene-manager:select! :menu))
           ]
       (tset $ :width loaded.w)
       (tset $ :height loaded.h)
@@ -32,8 +35,9 @@
       (each [_ {: id : x : y : fields} (ipairs entities.entities)]
         (case id
           :Player_start
-          (let [player (player-ent.new! x y)] (player:add) (tset $ :player player))
+          (let [player (player-ent.new! x y on-treasure)] (player:add) (tset $ :player player))
           :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
+          :Treasure (-> (treasure.new! x y (?. fields :type)) (: :add))
           ))
       (bg:setTilemap layer.tilemap)
       (layer.tilemap:setImageTable $.main-tiles)
@@ -81,7 +85,6 @@
     )
 
   (fn draw! [$]
-    
     ;; ($.layer.tilemap:draw 0 0)
     )
   )

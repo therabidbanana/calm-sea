@@ -3,15 +3,18 @@
 (defns :player
   [pressed? playdate.buttonIsPressed
    gfx playdate.graphics
+   $ui (require :source.lib.ui)
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
     (let [accel (if (or (pressed? playdate.kButtonDown) (pressed? playdate.kButtonA))
-                    0.15
-                    (pressed? playdate.kButtonUp)
-                    (math.min (- 0 (* 0.2 state.speed)) -0.05)
-                    -0.05)
-          speed (clamp 0 (+ state.speed accel) 4)
+                    0.25
+                    -0.01)
+          
+          drag  (if (pressed? playdate.kButtonUp)
+                    0.2
+                    0.92)
+          speed (clamp 0 (+ (* drag state.speed) accel) 4)
           
           angle   (playdate.getCrankPosition)
           (dx dy) (-> speed
@@ -29,7 +32,7 @@
       (tset self :state :angle angle)
       (tset self :state :invuln-ticks (math.max 0 (- (or state.invuln-ticks 0) 1)))
       (tset self :state :speed speed)
-      (tset self :state :swimming? (not (and (= 0 dx) (= 0 dy))))
+      (tset self :state :swimming? (not (and (= 0 (math.floor dx)) (= 0 (math.floor dy)))))
       )
     self)
 
@@ -52,7 +55,11 @@
   (fn dead? [{:state {: health}}]
     (<= health 0))
 
-  (fn new! [x y]
+  (fn give-treasure! [self treasure-type]
+    ($ui:open-textbox! {:text (gfx.getLocalizedText "mermaid.foundtreasure")
+                        :action #(self.state.on-treasure treasure-type)}))
+
+  (fn new! [x y on-treasure]
     (let [image (gfx.imagetable.new :assets/images/mermaid)
           animation (anim.new {: image :states [{:state :standing :start 1 :end 8}
                                                 ;; In 45 degree increments
@@ -72,8 +79,11 @@
       (tset player :update update)
       (tset player :react! react!)
       (tset player :take-damage take-damage)
+      (tset player :give-treasure! give-treasure!)
       (tset player :dead? dead?)
-      (tset player :state {: animation :health 3 :angle 0 :speed 0 :dx 0 :dy 0 :visible true})
+      (tset player :state {: animation : on-treasure :health 3 :angle 0 :speed 0 :dx 0 :dy 0 :visible true})
       (player:setCollideRect 6 1 24 30)
+      (player:setGroups [1])
+      (player:setCollidesWithGroups [3])
       player)))
 

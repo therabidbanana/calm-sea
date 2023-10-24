@@ -9,26 +9,18 @@
 
   (fn enter! [$]
     ($ui:open-menu!
-     {:options [{:text "Foo" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2") :nametag "Picarding"})}
-                {:text "Bar [!]" :action #(scene-manager:select! :level0)}
-                {:text "Quux" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")})}
-                {:text "Qux" :keep-open? true}
-                {:text "Corge"}
-                {:text "Grault"}
-                {:text "Garply"}
+     {:options [{:text "Start [Level 1]" :action #(scene-manager:select! :level0)}
+                {:text "About" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.about")})}
                 ]}))
 
   (fn exit! [$]
     (tset $ :state {}))
 
   (fn tick! [$scene]
-    (if ($ui:active?) ($ui:tick!)
-
-     (playdate.buttonJustPressed playdate.kButtonA)
-     (scene-manager:select! :level0)))
+    (if (playdate.buttonJustPressed playdate.kButtonA)
+        (scene-manager:select! :level0)))
 
   (fn draw! [$scene]
-    ($ui:render!)
     )
   )
 
