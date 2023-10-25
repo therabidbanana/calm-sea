@@ -1,8 +1,8 @@
-name=Fennel test
+name=Calm Sea
 author=therabidbanana
-description=Fennel Test Game
-bundleID=com.davidhaslem.fennel-test
+description=A game for aspiring mermaids
+bundleID=com.davidhaslem.calm-sea
 version=1.0
 buildNumber=1
-imagePath=assets
+imagePath=assets/images
 launchSoundPath=
