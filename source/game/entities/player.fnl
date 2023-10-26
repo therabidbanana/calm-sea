@@ -1,4 +1,4 @@
-(import-macros {: inspect : defns : clamp} :source.lib.macros)
+(import-macros {: inspect : defns : clamp : round} :source.lib.macros)
 
 (defns :player
   [pressed? playdate.buttonIsPressed
@@ -7,19 +7,55 @@
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
-    (let [accel (if (or (pressed? playdate.kButtonDown) (pressed? playdate.kButtonA))
+    (let [any-arrow? (or (pressed? playdate.kButtonDown)
+                         (pressed? playdate.kButtonUp)
+                         (pressed? playdate.kButtonLeft)
+                         (pressed? playdate.kButtonRight))
+          crankin (not (playdate.isCrankDocked))
+          accel (if (or (pressed? playdate.kButtonA)
+                        (if crankin (pressed? playdate.kButtonDown)
+                            any-arrow?))
                     0.25
                     -0.01)
           
-          drag  (if (pressed? playdate.kButtonUp)
+          drag  (if (or (pressed? playdate.kButtonB)
+                        (and crankin (pressed? playdate.kButtonUp)))
                     0.2
                     0.92)
           speed (clamp 0 (+ (* drag state.speed) accel) 4)
-          
-          angle   (playdate.getCrankPosition)
-          (dx dy) (-> speed
-                      (playdate.geometry.vector2D.newPolar angle)
-                      (: :unpack))
+          angle   (if crankin
+                      (playdate.getCrankPosition)
+                      (and (pressed? playdate.kButtonDown)
+                           (pressed? playdate.kButtonLeft))
+                      225
+
+                      (and (pressed? playdate.kButtonDown)
+                           (pressed? playdate.kButtonRight))
+                      135
+
+                      (and (pressed? playdate.kButtonUp)
+                           (pressed? playdate.kButtonLeft))
+                      315
+
+                      (and (pressed? playdate.kButtonUp)
+                           (pressed? playdate.kButtonRight))
+                      45
+
+                      (pressed? playdate.kButtonLeft)
+                      270
+
+                      (pressed? playdate.kButtonRight)
+                      90
+
+                      (pressed? playdate.kButtonDown)
+                      180
+                      (pressed? playdate.kButtonUp)
+                      0
+                      state.angle)
+          new_dir (playdate.geometry.vector2D.newPolar speed angle)
+          ;; new_dir (playdate.geometry.vector2D.newPolar speed new_angle)
+
+          (dx dy) (new_dir:unpack)
 
           dx (if (and (>= (+ x width) $scene.width) (> dx 0)) 0
                  (and (<= x 0) (< dx 0)) 0
@@ -38,11 +74,11 @@
 
   (fn update [{:state {: animation : invuln-ticks : dx : dy : angle : swimming?} &as self}]
     (if swimming?
-        (animation:transition! (.. :swim- (math.floor (+ 0.5 (/ (or angle 0) 45)))))
+        (animation:transition! (.. :swim- (round (/ (or angle 0) 45))))
         (animation:transition! :standing))
     (self:setVisible (= (% (// (or invuln-ticks 0) 5) 2) 0))
     (self:setImage (animation:getImage))
-    (self:moveBy (math.floor dx) (math.floor dy))
+    (self:moveBy (round dx) (round dy))
     )
 
   (fn take-damage [{:state {: health : invuln-ticks &as state}}]

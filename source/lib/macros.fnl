@@ -27,6 +27,8 @@
 (fn clamp [min x max]
   `(math.max (math.min ,x ,max) ,min))
 
+(fn round [val]
+  `(math.floor (+ 0.5 ,val)))
 
-{: inspect : pd/import : defns : clamp }
+{: inspect : pd/import : defns : clamp : round }
 

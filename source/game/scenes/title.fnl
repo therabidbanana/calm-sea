@@ -9,8 +9,10 @@
   (fn enter! [$]
     (let [img (gfx.image.new :assets/images/title)
           bg (gfx.sprite.new img)
+          _ (gfx.pushContext)
           _ (gfx.setImageDrawMode gfx.kDrawModeFillWhite)
           a-to-start (gfx.imageWithText "Ⓐ to Start" 100 100 gfx.kColorBlack)
+          _ (gfx.popContext)
           start (gfx.sprite.new a-to-start)
           ]
       (bg:setCenter 0 0)
@@ -20,7 +22,8 @@
       (start:moveTo 200 210)
       (start:setZIndex 100)
       (start:add)
-      ))
+      )
+    )
 
   (fn exit! [$]
     )

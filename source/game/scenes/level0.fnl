@@ -5,6 +5,7 @@
   [{:player player-ent
     : player-hud
     : treasure
+    : shark
     :school school-ent} (require :source.game.entities.core)
    ldtk (require :source.lib.ldtk.loader)
    scene-manager (require :source.lib.scene-manager)
@@ -37,6 +38,7 @@
           :Player_start
           (let [player (player-ent.new! x y on-treasure)] (player:add) (tset $ :player player))
           :School (-> (school-ent.new! x y (?. fields :speed)) (: :add))
+          :Shark (-> (shark.new! x y (?. fields :speed)) (: :add))
           :Treasure (-> (treasure.new! x y (?. fields :type)) (: :add))
           ))
       (bg:setTilemap layer.tilemap)
