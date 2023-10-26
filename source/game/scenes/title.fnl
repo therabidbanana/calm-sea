@@ -32,7 +32,7 @@
     (if ($ui:active?) ($ui:tick!)
 
         (playdate.buttonJustPressed playdate.kButtonA)
-        (scene-manager:select! :level0))
+        (scene-manager:select! :menu))
     )
   (fn draw! [$]
     ;; ($.layer.tilemap:draw 0 0)

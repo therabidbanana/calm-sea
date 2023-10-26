@@ -76,10 +76,15 @@
     (if swimming?
         (animation:transition! (.. :swim- (round (/ (or angle 0) 45))))
         (animation:transition! :standing))
-    (self:setVisible (= (% (// (or invuln-ticks 0) 5) 2) 0))
     (self:setImage (animation:getImage))
-    (self:moveBy (round dx) (round dy))
+    (let [target-x (+ (round dx) self.x)
+          target-y (+ (round dy) self.y)
+          (x y collisions count) (self:moveWithCollisions target-x target-y)]
+      (self:setVisible (= (% (// (or invuln-ticks 0) 5) 2) 0)))
     )
+
+  (fn collisionResponse [self other]
+    (other:collisionResponse))
 
   (fn take-damage [{:state {: health : invuln-ticks &as state}}]
     (if (<= (or invuln-ticks 0) 0)
@@ -114,12 +119,13 @@
       (player:setCenter 0 0)
       (tset player :update update)
       (tset player :react! react!)
+      (tset player :collisionResponse collisionResponse)
       (tset player :take-damage take-damage)
       (tset player :give-treasure! give-treasure!)
       (tset player :dead? dead?)
       (tset player :state {: animation : on-treasure :health 3 :angle 0 :speed 0 :dx 0 :dy 0 :visible true})
       (player:setCollideRect 6 1 24 30)
       (player:setGroups [1])
-      (player:setCollidesWithGroups [3])
+      (player:setCollidesWithGroups [3 4])
       player)))
 
