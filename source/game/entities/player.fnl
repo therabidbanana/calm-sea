@@ -57,10 +57,10 @@
 
           (dx dy) (new_dir:unpack)
 
-          dx (if (and (>= (+ x width) $scene.width) (> dx 0)) 0
+          dx (if (and (>= (+ x width) $scene.state.stage-width) (> dx 0)) 0
                  (and (<= x 0) (< dx 0)) 0
                  dx)
-          dy (if (and (>= (+ y height) $scene.height) (> dy 0)) 0
+          dy (if (and (>= (+ y height) $scene.state.stage-height) (> dy 0)) 0
                  (and (<= y 0) (< dy 0)) 0
                  dy)]
       (tset self :state :dx dx)

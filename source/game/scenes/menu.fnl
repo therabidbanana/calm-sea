@@ -9,7 +9,7 @@
 
   (fn enter! [$]
     ($ui:open-menu!
-     {:options [{:text "Start [Level 1]" :action #(scene-manager:select! :level0)}
+     {:options [{:text "Level 1" :action #(scene-manager:select! :level0)}
                 {:text "About" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.about")})}
                 ]}))
 
