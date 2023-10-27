@@ -17,15 +17,22 @@
 
 (let [{: scene-manager} (require :source.lib.core)
       $ui (require :source.lib.ui)
+      timer playdate.timer
       ]
   (scene-manager:load-scenes! (require :source.game.scenes))
-  (scene-manager:select! :title)
+  (scene-manager:select! :logo)
 
   (fn playdate.update []
     (if ($ui:active?)
         (do
-          ($ui:tick!) ($ui:render!))
+          (timer.updateTimers)
+          ($ui:tick!)
+          ($ui:render!)
+          (scene-manager:transition-draw!)
+          )
         (do
+          (timer.updateTimers)
           (scene-manager:tick!)
-          (scene-manager:draw!)))))
+          (scene-manager:draw!)
+          (scene-manager:transition-draw!)))))
 

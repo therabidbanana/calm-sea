@@ -53,13 +53,13 @@
     ;;                       (+ (* 0.25 (math.sin (// state.ticks 40))) (* -0.2 state.player.state.dy)))
     ;; ($scene.far-bg2:moveBy (* -0.3 (math.cos (// state.ticks 40))) (* -0.1 state.player.state.dy))
     (if (and (= (% (// state.ticks 12) 2) 0) (= $scene.curr-tiles $scene.alt-tiles))
-        (do ($scene.state.tiles.tilemap:setImageTable $scene.main-tiles)
+        (do (state.tiles.tilemap:setImageTable $scene.main-tiles)
             (tset $scene :curr-tiles $scene.main-tiles)
-            ($scene.state.tiles.sprite:markDirty))
+            (state.tiles.sprite:markDirty))
         (and (not= (% (// state.ticks 12) 2) 0) (= $scene.curr-tiles $scene.main-tiles))
-        (do ($scene.state.tiles.tilemap:setImageTable $scene.alt-tiles)
+        (do (state.tiles.tilemap:setImageTable $scene.alt-tiles)
             (tset $scene :curr-tiles $scene.alt-tiles)
-            ($scene.state.tiles.sprite:markDirty)))
+            (state.tiles.sprite:markDirty)))
 
     
     )

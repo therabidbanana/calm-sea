@@ -17,6 +17,8 @@
 
         :Shark (-> (entities.shark.new! x y (?. fields :speed)) (: :add))
 
+        :Angler (-> (entities.angler.new! x y (?. fields :speed)) (: :add))
+
         :Treasure (-> (entities.treasure.new! x y (?. fields :type)) (: :add))
 
         ))
