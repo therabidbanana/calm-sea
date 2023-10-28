@@ -52,7 +52,7 @@
 
   (fn tick! [{: state &as $scene}]
     (level-builder.tick-level! $scene)
-    (let [tile-num (+ (% (// state.ticks 12) 5) 1)
+    (let [tile-num (+ (% (// state.ticks 30) 5) 1)
           tileset (.. "tiles-" tile-num)]
       (if (not= $scene.curr-tiles tileset)
           (do

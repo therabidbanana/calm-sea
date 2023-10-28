@@ -22,7 +22,10 @@
         :Jellyfish (-> (entities.jellyfish.new! x y {: fields : tile-w : tile-h})
                        (: :add))
 
-        :Treasure (-> (entities.treasure.new! x y (?. fields :type)) (: :add))
+        :Treasure (if (?. $treasures (?. fields :type))
+                      ;; Already have it!
+                      nil
+                      (-> (entities.treasure.new! x y (?. fields :type)) (: :add)))
 
         ))
     player-ent)

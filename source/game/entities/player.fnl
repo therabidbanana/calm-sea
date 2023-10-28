@@ -97,6 +97,7 @@
     (<= health 0))
 
   (fn give-treasure! [self treasure-type]
+    (tset $treasures treasure-type true)
     ($ui:open-textbox! {:text (gfx.getLocalizedText "mermaid.foundtreasure")
                         :action #(self.state.on-treasure treasure-type)}))
 

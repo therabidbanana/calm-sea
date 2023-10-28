@@ -14,6 +14,7 @@
 (pd/import :CoreLibs/timer)
 
 (global $config {:debug true})
+(global $treasures {})
 
 (let [{: scene-manager} (require :source.lib.core)
       $ui (require :source.lib.ui)

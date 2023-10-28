@@ -7,9 +7,14 @@
       pd playdate
       gfx pd.graphics]
 
+  (fn level-name [text treasures]
+    (let [strs (icollect [_ name (ipairs treasures)]
+                 (if (?. $treasures name) " !! " " ? "))]
+      (.. text (table.unpack strs))))
+
   (fn enter! [$]
     ($ui:open-menu!
-     {:options [{:text "Level 1" :action #(scene-manager:select! :level0)}
+     {:options [{:text (level-name "Level 1" [:fork]) :action #(scene-manager:select! :level0)}
                 {:text "About" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.about")})}
                 ]}))
 
