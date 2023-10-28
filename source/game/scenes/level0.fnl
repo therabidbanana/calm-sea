@@ -16,15 +16,20 @@
           ;; far-bg2 (gfx.sprite.new (-> (gfx.image.new :assets/images/shimmer2)
           ;;                             (: :fadedImage 0.2 gfx.image.kDitherTypeAtkinson))
           ;;                         )
-          alt-tiles (gfx.imagetable.new :assets/images/tiles1)
-          main-tiles (gfx.imagetable.new :assets/images/tiles)
+
+          all-tiles {
+           :tiles-1 (gfx.imagetable.new :assets/images/tiles-1)
+           :tiles-2 (gfx.imagetable.new :assets/images/tiles-2)
+           :tiles-3 (gfx.imagetable.new :assets/images/tiles-3)
+           :tiles-4 (gfx.imagetable.new :assets/images/tiles-4)
+           :tiles-5 (gfx.imagetable.new :assets/images/tiles-5)
+           }
           on-treasure (fn [_type] (scene-manager:select! :menu))
           ]
       (tset $ :state state)
       (tset state :player :state :on-treasure on-treasure)
-      (tset $ :alt-tiles alt-tiles)
-      (tset $ :main-tiles main-tiles)
-      (tset $ :curr-tiles $.main-tiles)
+      (tset $ :all-tiles all-tiles)
+      (tset $ :curr-tiles :tiles-1)
       ;; (tset $ :far-bg far-bg)
       ;; (tset $ :far-bg2 far-bg2)
       ;; (far-bg:moveTo 0 100)
@@ -47,21 +52,20 @@
 
   (fn tick! [{: state &as $scene}]
     (level-builder.tick-level! $scene)
+    (let [tile-num (+ (% (// state.ticks 12) 5) 1)
+          tileset (.. "tiles-" tile-num)]
+      (if (not= $scene.curr-tiles tileset)
+          (do
+            (tset $scene :curr-tiles tileset)
+            (state.tiles.tilemap:setImageTable (. $scene.all-tiles tileset))
+            (state.tiles.sprite:markDirty))))
 
-    ;; Handle animated BG via image table swaps
+
+    ;; Handle ocean wave effect
     ;; ($scene.far-bg:moveBy (+ (* 0.3 (math.cos (// state.ticks 40))) (* -0.2 state.player.state.dx))
     ;;                       (+ (* 0.25 (math.sin (// state.ticks 40))) (* -0.2 state.player.state.dy)))
     ;; ($scene.far-bg2:moveBy (* -0.3 (math.cos (// state.ticks 40))) (* -0.1 state.player.state.dy))
-    (if (and (= (% (// state.ticks 12) 2) 0) (= $scene.curr-tiles $scene.alt-tiles))
-        (do (state.tiles.tilemap:setImageTable $scene.main-tiles)
-            (tset $scene :curr-tiles $scene.main-tiles)
-            (state.tiles.sprite:markDirty))
-        (and (not= (% (// state.ticks 12) 2) 0) (= $scene.curr-tiles $scene.main-tiles))
-        (do (state.tiles.tilemap:setImageTable $scene.alt-tiles)
-            (tset $scene :curr-tiles $scene.alt-tiles)
-            (state.tiles.sprite:markDirty)))
-
-    
+    ;; 
     )
 
   (fn draw! [$]

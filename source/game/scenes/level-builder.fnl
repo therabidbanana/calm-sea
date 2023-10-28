@@ -5,7 +5,7 @@
                        scene-manager (require :source.lib.scene-manager)
                        gfx playdate.graphics]
 
-  (fn add-entities! [layer]
+  (fn add-entities! [{: tile-h : tile-w &as layer}]
     (var player-ent nil)
     (each [_ {: id : x : y : fields} (ipairs layer.entities)]
       (case id
@@ -18,6 +18,9 @@
         :Shark (-> (entities.shark.new! x y (?. fields :speed)) (: :add))
 
         :Angler (-> (entities.angler.new! x y (?. fields :speed)) (: :add))
+
+        :Jellyfish (-> (entities.jellyfish.new! x y {: fields : tile-w : tile-h})
+                       (: :add))
 
         :Treasure (-> (entities.treasure.new! x y (?. fields :type)) (: :add))
 

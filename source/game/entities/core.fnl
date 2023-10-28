@@ -3,6 +3,7 @@
       school (require :source.game.entities.school)
       shark (require :source.game.entities.shark)
       angler (require :source.game.entities.angler)
+      jellyfish (require :source.game.entities.jellyfish)
       treasure (require :source.game.entities.treasure)
       ]
   {: player
@@ -10,4 +11,5 @@
    : school
    : shark
    : angler
+   : jellyfish
    : treasure})
