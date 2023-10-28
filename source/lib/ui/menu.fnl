@@ -35,9 +35,10 @@
     (if (not keep-open?) ($ui:pop-component!))
     (if action (action)))
 
-  (fn render! [{: view : rect &as comp} $ui]
+  (fn render! [{: view : rect : on-draw &as comp} $ui]
     ;; needsDisplay note - sprite update sometimes wipes area
-    (view:drawInRect (rect:unpack)))
+    (view:drawInRect (rect:unpack))
+    (if on-draw (on-draw comp (?. view.options (view:getSelectedRow)))))
 
   (fn tick! [{: view : anim-w : anim-h &as comp} $ui]
     (let [pressed? playdate.buttonJustPressed
@@ -70,7 +71,7 @@
         (: :setCellPadding 0 0 5 4)
         (: :setCellSize 0 24)
         (: :setContentInset 8 8 12 11))
-      (table.shallowcopy proto {: view : rect : anim-w : anim-h}))
+      (table.shallowcopy proto {: view : rect : anim-w : anim-h : on-draw}))
     )
   )
 
