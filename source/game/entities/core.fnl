@@ -4,6 +4,7 @@
       shark (require :source.game.entities.shark)
       angler (require :source.game.entities.angler)
       jellyfish (require :source.game.entities.jellyfish)
+      horizontal-current (require :source.game.entities.horizontal-current)
       treasure (require :source.game.entities.treasure)
       ]
   {: player
@@ -12,4 +13,5 @@
    : shark
    : angler
    : jellyfish
+   : horizontal-current
    : treasure})

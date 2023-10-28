@@ -7,7 +7,7 @@
 
   (fn add-entities! [{: tile-h : tile-w &as layer}]
     (var player-ent nil)
-    (each [_ {: id : x : y : fields} (ipairs layer.entities)]
+    (each [_ {: id : width : height : x : y : fields} (ipairs layer.entities)]
       (case id
         :Player_start
         ;; TODO fix on-treasure
@@ -21,6 +21,9 @@
 
         :Jellyfish (-> (entities.jellyfish.new! x y {: fields : tile-w : tile-h})
                        (: :add))
+
+        :HorizontalCurrent (-> (entities.horizontal-current.new! x y {:speed (?. fields :speed) : width : height})
+                               (: :add))
 
         :Treasure (if (?. $treasures (?. fields :type))
                       ;; Already have it!

@@ -20,8 +20,10 @@
         tiles (icollect [_ {:px [x y] : t} (ipairs tiles)]
                 {:x (+ (// x tile-w) 1) :y (+ (// y tile-h) 1) :tile (+ t 1)})
         entities (icollect [_ {:px [x y] :__identifier id
+                               : width : height
                                : fieldInstances} (ipairs entities)]
                    {:x x :y y : id
+                    : width : height
                     :fields
                     (collect [_ {:__identifier key :__value val} (ipairs fieldInstances)] (values key val))})
         ]

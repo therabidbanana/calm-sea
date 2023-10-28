@@ -11,7 +11,7 @@
 	"iid": "7e489f20-6280-11ee-94e3-4b3019ff8156",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 19,
+	"nextUid": 21,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -592,6 +592,76 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "HorizontalCurrent",
+			"uid": 19,
+			"tags": [],
+			"exportToToc": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"minWidth": 32,
+			"maxWidth": null,
+			"minHeight": 8,
+			"maxHeight": 32,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#0099DB",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "speed",
+					"doc": null,
+					"__type": "Int",
+					"uid": 20,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Int", "params": [2] },
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -792,25 +862,6 @@
 							"fieldInstances": [{ "__identifier": "speed", "__type": "Int", "__value": 2, "__tile": null, "defUid": 8, "realEditorValues": [] }]
 						},
 						{
-							"__identifier": "Player_start",
-							"__grid": [18,22],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": { "tilesetUid": 1, "x": 0, "y": 16, "w": 16, "h": 16 },
-							"__smartColor": "#BE4A2F",
-							"__worldX": 288,
-							"__worldY": 352,
-							"iid": "fcc1d950-6280-11ee-a58a-f5307a769266",
-							"width": 16,
-							"height": 16,
-							"defUid": 4,
-							"px": [288,352],
-							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "Banana", "__tile": null, "defUid": 6, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Banana"]
-							}] }]
-						},
-						{
 							"__identifier": "School",
 							"__grid": [4,68],
 							"__pivot": [0,0],
@@ -955,22 +1006,6 @@
 							"fieldInstances": [{ "__identifier": "speed", "__type": "Int", "__value": 1, "__tile": null, "defUid": 15, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }]
 						},
 						{
-							"__identifier": "Angler",
-							"__grid": [11,71],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7273E4",
-							"__worldX": 176,
-							"__worldY": 1136,
-							"iid": "e9624450-6280-11ee-a9d0-bfa82bcc96b1",
-							"width": 32,
-							"height": 32,
-							"defUid": 14,
-							"px": [176,1136],
-							"fieldInstances": [{ "__identifier": "speed", "__type": "Int", "__value": 0, "__tile": null, "defUid": 15, "realEditorValues": [] }]
-						},
-						{
 							"__identifier": "Jellyfish",
 							"__grid": [19,81],
 							"__pivot": [0,0],
@@ -1013,6 +1048,38 @@
 									"params": ["6,77"]
 								}] }
 							]
+						},
+						{
+							"__identifier": "HorizontalCurrent",
+							"__grid": [0,76],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#0099DB",
+							"__worldX": 0,
+							"__worldY": 1216,
+							"iid": "6ae11dd0-6280-11ee-a9d0-73fa93d8b7c7",
+							"width": 400,
+							"height": 32,
+							"defUid": 19,
+							"px": [0,1216],
+							"fieldInstances": [{ "__identifier": "speed", "__type": "Int", "__value": 2, "__tile": null, "defUid": 20, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "Player_start",
+							"__grid": [8,62],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 1, "x": 0, "y": 16, "w": 16, "h": 16 },
+							"__smartColor": "#BE4A2F",
+							"__worldX": 128,
+							"__worldY": 992,
+							"iid": "e4e02020-6280-11ee-a9d0-87279a89ab51",
+							"width": 16,
+							"height": 16,
+							"defUid": 4,
+							"px": [128,992],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "", "__tile": null, "defUid": 6, "realEditorValues": [] }]
 						}
 					]
 				},
