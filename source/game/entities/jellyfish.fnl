@@ -11,14 +11,14 @@
         (tset state :speed (- 0 state.speed)))
     self)
 
-  (fn update [{:state {: animation : location-anim } : x : y &as self}]
+  (fn update [{:state {: animation : location-anim} : x : y &as self}]
     (self:setImage (animation:getImage))
-    (self:markDirty)
+    ;; (self:markDirty)
     (self:moveTo (location-anim:currentValue)))
 
   (fn new! [x y {:fields {: speed : range} : tile-h : tile-w }]
     (let [image (gfx.imagetable.new :assets/images/jellyfish)
-          animation (anim.new {: image :base-delay 100
+          animation (anim.new {: image :delay 350
                                :states [{:state :up :start 1 :end 3}]})
           school (gfx.sprite.new)
           home-point (playdate.geometry.point.new x y)

@@ -20,8 +20,10 @@
       $ui (require :source.lib.ui)
       timer playdate.timer
       ]
+  (playdate.display.setRefreshRate 30)
   (scene-manager:load-scenes! (require :source.game.scenes))
   (scene-manager:select! :logo)
+
 
   (fn playdate.update []
     (if ($ui:active?)

@@ -16,12 +16,12 @@
         (animation:transition! :right)
         (animation:transition! :left))
     (self:setImage (animation:getImage))
-    (self:markDirty)
+    ;; (self:markDirty)
     (self:moveBy speed 0))
 
   (fn new! [x y speed]
     (let [image (gfx.imagetable.new :assets/images/shark)
-          animation (anim.new {: image :base-delay 100
+          animation (anim.new {: image :delay 500
                                :states [{:state :right :start 1 :end 3}
                                         {:state :left :start 4 :end 6}
                                         ]})

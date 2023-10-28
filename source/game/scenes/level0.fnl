@@ -58,7 +58,8 @@
           (do
             (tset $scene :curr-tiles tileset)
             (state.tiles.tilemap:setImageTable (. $scene.all-tiles tileset))
-            (state.tiles.sprite:markDirty))))
+            (state.tiles.sprite:markDirty)))
+      )
 
 
     ;; Handle ocean wave effect

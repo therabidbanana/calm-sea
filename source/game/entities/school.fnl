@@ -16,12 +16,12 @@
         (animation:transition! :right)
         (animation:transition! :left))
     (self:setImage (animation:getImage))
-    (self:markDirty)
+    ;; (self:markDirty)
     (self:moveBy speed 0))
 
   (fn new! [x y speed]
     (let [image (gfx.imagetable.new :assets/images/school)
-          animation (anim.new {: image :base-delay 100
+          animation (anim.new {: image :delay (+ 200 (math.random 100))
                                :states [{:state :right :start 1 :end 4}
                                         {:state :left :start 5 :end 8}]})
           school (gfx.sprite.new)]

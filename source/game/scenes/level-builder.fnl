@@ -74,24 +74,20 @@
     (tset state :ticks (+ state.ticks 1))
     (gfx.sprite.performOnAllSprites
      (fn react-each [ent]
-       (if (?. ent :react!) (ent:react! $scene)))
-     (if state.player
-         (let [player-x state.player.x
-               player-y state.player.y
-               player-health state.player.state.health
-               player-invuln (or state.player.state.invuln-ticks 0)
-               center-x (clamp 0 (- player-x 200) (- state.stage-width 400))
-               center-y (clamp 0 (- player-y 120) (- state.stage-height 240))]
-           (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
-           (each [_ other (ipairs (state.player:overlappingSprites))]
-             (if (and (not other.wall?) (<= player-invuln 0))
-                 (state.player:take-damage)))
-           ;; (if (and (> (length ) 0)
-           ;;          (<= player-invuln 0))
-           ;;     ($scene.player:take-damage))
-           (if (state.player:dead?)
-               (scene-manager:select! :menu))))
-     )
+       (if (?. ent :react!) (ent:react! $scene))))
+    (if state.player
+        (let [player-x state.player.x
+              player-y state.player.y
+              player-health state.player.state.health
+              player-invuln (or state.player.state.invuln-ticks 0)
+              center-x (clamp 0 (- player-x 200) (- state.stage-width 400))
+              center-y (clamp 0 (- player-y 120) (- state.stage-height 240))]
+          (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
+          (each [_ other (ipairs (state.player:overlappingSprites))]
+            (if (and (not other.wall?) (<= player-invuln 0))
+                (state.player:take-damage)))
+          (if (state.player:dead?)
+              (scene-manager:select! :menu))))
 
     )
 
