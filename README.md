@@ -2,6 +2,14 @@
 
 A game about mermaids swimming around
 
+# Licensing
+
+Art and code is all custom. 
+
+Fonts from the Playdate SDK, and music:
+
+https://opengameart.org/content/the-frigid-seas
+
 # Playdate Fennel Starter
 
 This starter set is intended to allow use of the Fennel language on Playdate,

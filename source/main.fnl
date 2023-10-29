@@ -19,11 +19,12 @@
 (let [{: scene-manager} (require :source.lib.core)
       $ui (require :source.lib.ui)
       timer playdate.timer
+      music-loop (playdate.sound.fileplayer.new :assets/sounds/the-frigid-seas)
       ]
   (playdate.display.setRefreshRate 30)
   (scene-manager:load-scenes! (require :source.game.scenes))
   (scene-manager:select! :logo)
-
+  (music-loop:play 0)
 
   (fn playdate.update []
     (if ($ui:active?)
