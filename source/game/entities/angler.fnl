@@ -9,15 +9,16 @@
         (tset state :speed (- 0 state.speed))
         (and (> -32 x) (< state.speed 0))
         (tset state :speed (- 0 state.speed)))
+    (tset state :ticks (+ state.ticks 1))
     self)
 
-  (fn update [{:state {: animation : speed} : x : y &as self}]
+  (fn update [{:state {: animation : speed : ticks} : x : y &as self}]
     (if (> speed 0)
         (animation:transition! :right)
         (animation:transition! :left))
     (self:setImage (animation:getImage))
     ;; (self:markDirty)
-    (self:moveBy speed 0))
+    (self:moveBy speed (math.sin (// ticks 40))))
 
   (fn new! [x y speed]
     (let [image (gfx.imagetable.new :assets/images/angler)
@@ -31,7 +32,7 @@
       (tset school :update update)
       (tset school :react! react!)
       (tset school :collisionResponse #gfx.sprite.kCollisionTypeOverlap)
-      (tset school :state {: animation :speed (or speed 3) :dx 0 :dy 0 :visible true})
+      (tset school :state {:ticks 0 : animation :speed (or speed 3) :dx 0 :dy 0 :visible true})
       (school:setCollideRect 2 8 34 15)
       (school:setGroups [3])
       school)))

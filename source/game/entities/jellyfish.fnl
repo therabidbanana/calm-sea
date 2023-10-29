@@ -5,10 +5,6 @@
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
-    (if (and (< $scene.state.stage-width x) (> state.speed 0))
-        (tset state :speed (- 0 state.speed))
-        (and (> -32 x) (< state.speed 0))
-        (tset state :speed (- 0 state.speed)))
     self)
 
   (fn update [{:state {: animation : location-anim} : x : y &as self}]

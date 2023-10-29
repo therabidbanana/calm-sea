@@ -5,21 +5,31 @@
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
-    (if (and (< $scene.state.stage-width x) (> state.speed 0))
-        (tset state :speed (- 0 state.speed))
-        (and (> -32 x) (< state.speed 0))
-        (tset state :speed (- 0 state.speed)))
+    (let [distant-x (if (> state.speed 0)
+                        $scene.state.stage-width
+                        0)
+          sprites-in-sight (icollect [_ p (ipairs (gfx.sprite.querySpritesAlongLine x y distant-x y))]
+                             (if p.player? p))
+          speed-boost (if (> (length sprites-in-sight) 0) ;;counting self?
+                          2 1)
+          ]
+      (tset state :speed-boost speed-boost)
+      (if (and (< $scene.state.stage-width x) (> state.speed 0))
+          (tset state :speed (- 0 state.speed))
+          (and (> -32 x) (< state.speed 0))
+          (tset state :speed (- 0 state.speed)))
+      )
     self)
 
-  (fn update [{:state {: animation : speed} : x : y &as self}]
+  (fn update [{:state {: animation : speed-boost : speed} : x : y &as self}]
     (if (> speed 0)
         (animation:transition! :right)
         (animation:transition! :left))
     (self:setImage (animation:getImage))
     ;; (self:markDirty)
-    (self:moveBy speed 0))
+    (self:moveBy (* speed-boost speed) 0))
 
-  (fn new! [x y speed]
+  (fn new! [x y {:fields {: speed : range} : tile-x : tile-y}]
     (let [image (gfx.imagetable.new :assets/images/shark)
           animation (anim.new {: image :delay 500
                                :states [{:state :right :start 1 :end 3}
