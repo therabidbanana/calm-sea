@@ -32,7 +32,7 @@
 
   (fn new! [x y _type bubbled?]
     (let [image (gfx.imagetable.new (.. :assets/images/ _type))
-          animation (anim.new {: image :states [{:state :sitting :start 1 :end 1}]})
+          animation (anim.new {: image :states [{:state :sitting :start 1 :end 6}]})
           treasure (gfx.sprite.new)]
       (if bubbled?
           (treasure:setBounds x y 32 32)

@@ -47,6 +47,8 @@
                  :text "Seaweed Cave" :action #(scene-manager:select! :level2)}
                 {:treasures [:necklace]
                  :text "Shark Haven" :action #(scene-manager:select! :level3)}
+                {:treasures [:crown]
+                 :text "The Reef" :action #(scene-manager:select! :level4)}
                 ]}))
 
   (fn exit! [$]

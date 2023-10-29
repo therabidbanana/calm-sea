@@ -4,6 +4,7 @@
  :level1 (require :source.game.scenes.level1)
  :level2 (require :source.game.scenes.level2)
  :level3 (require :source.game.scenes.level3)
+ :level4 (require :source.game.scenes.level4)
  :menu (require :source.game.scenes.menu)
  :logo (require :source.game.scenes.logo)
  }
