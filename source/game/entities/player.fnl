@@ -4,7 +4,9 @@
   [pressed? playdate.buttonIsPressed
    gfx playdate.graphics
    $ui (require :source.lib.ui)
-   anim (require :source.lib.animation)]
+   anim (require :source.lib.animation)
+   treasure-ent (require :source.game.entities.treasure)
+   ]
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
     (let [any-arrow? (or (pressed? playdate.kButtonDown)
@@ -88,9 +90,11 @@
 
   (fn take-damage [{:state {: health : invuln-ticks &as state}}]
     (if (<= (or invuln-ticks 0) 0)
-        (doto state
-          (tset :invuln-ticks 80)
-          (tset :health (- health 1)))
+        (let [sounds state.sounds]
+          (sounds.ouchie:play)
+          (doto state
+            (tset :invuln-ticks 80)
+            (tset :health (- health 1))))
         ))
 
   (fn dead? [{:state {: health}}]
@@ -98,11 +102,16 @@
 
   (fn give-treasure! [self treasure-type]
     (tset $treasures treasure-type true)
-    ($ui:open-textbox! {:text (gfx.getLocalizedText "mermaid.foundtreasure")
-                        :action #(self.state.on-treasure treasure-type)}))
+    (self.state.sounds.ooh:play)
+    (-> (treasure-ent.new! (- 200 32) 100 treasure-type true) (: :add))
+    ($ui:open-textbox! {:text (gfx.getLocalizedText (.. "mermaid.foundtreasure." treasure-type))
+                        :action #(self.state.on-treasure treasure-type)
+                        }))
 
   (fn new! [x y on-treasure]
     (let [image (gfx.imagetable.new :assets/images/mermaid)
+          ouchie (playdate.sound.sampleplayer.new :assets/sounds/ouchie)
+          ooh (playdate.sound.sampleplayer.new :assets/sounds/ooh)
           animation (anim.new {: image :states [{:state :standing :start 1 :end 8}
                                                 ;; In 45 degree increments
                                                 {:state :swim-0 :start 9 :end 11}
@@ -118,13 +127,14 @@
           player (gfx.sprite.new)]
       (player:setBounds x y 32 32)
       (player:setCenter 0 0)
+      (tset player :player? true)
       (tset player :update update)
       (tset player :react! react!)
       (tset player :collisionResponse collisionResponse)
       (tset player :take-damage take-damage)
       (tset player :give-treasure! give-treasure!)
       (tset player :dead? dead?)
-      (tset player :state {: animation : on-treasure :health 3 :angle 0 :speed 0 :dx 0 :dy 0 :visible true})
+      (tset player :state {: animation : on-treasure :health 3 :angle 0 :speed 0 :dx 0 :dy 0 :visible true :sounds {: ouchie : ooh}})
       (player:setCollideRect 6 1 24 30)
       (player:setGroups [1])
       (player:setCollidesWithGroups [3 4])

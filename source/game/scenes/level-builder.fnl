@@ -15,7 +15,8 @@
 
         :School (-> (entities.school.new! x y (?. fields :speed)) (: :add))
 
-        :Shark (-> (entities.shark.new! x y (?. fields :speed)) (: :add))
+        :Shark (-> (entities.shark.new! x y {: fields : tile-w : tile-h})
+                   (: :add))
 
         :Angler (-> (entities.angler.new! x y (?. fields :speed)) (: :add))
 
@@ -23,6 +24,9 @@
                        (: :add))
 
         :HorizontalCurrent (-> (entities.horizontal-current.new! x y {:speed (?. fields :speed) : width : height})
+                               (: :add))
+
+        :VerticalCurrent (-> (entities.vertical-current.new! x y {:speed (?. fields :speed) : width : height})
                                (: :add))
 
         :Treasure (if (?. $treasures (?. fields :type))

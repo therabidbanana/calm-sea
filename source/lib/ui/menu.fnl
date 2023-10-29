@@ -36,9 +36,10 @@
     (if action (action)))
 
   (fn render! [{: view : rect : on-draw &as comp} $ui]
+    (if on-draw (on-draw comp (?. view.options (view:getSelectedRow))))
     ;; needsDisplay note - sprite update sometimes wipes area
     (view:drawInRect (rect:unpack))
-    (if on-draw (on-draw comp (?. view.options (view:getSelectedRow)))))
+    )
 
   (fn tick! [{: view : anim-w : anim-h &as comp} $ui]
     (let [pressed? playdate.buttonJustPressed
@@ -53,7 +54,7 @@
           (pressed? playdate.kButtonUp) (view:selectPreviousRow)
           (pressed? playdate.kButtonA) (-handle-click selected $ui))))
 
-  (fn new! [proto $ui {: options : x : y : w : h : animate?}]
+  (fn new! [proto $ui {: options : x : y : w : h : animate? : on-draw}]
     (let [view (playdate.ui.gridview.new 0 10)
           rect (playdate.geometry.rect.new (or x 10) (or y 10)
                                            (if animate? 0 w w 180)
